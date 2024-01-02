@@ -17,7 +17,7 @@
         default: '',
       },
     },
-    emits: ['update:modelValue', 'calculate', 'clear', 'delete'],
+    emits: ['update:modelValue', 'calculate', 'clear', 'delete', 'toggleParenthesis'],
     setup(props, { emit }) {
       const handleClick = () => {
         if (props.label === '=') {
@@ -27,6 +27,8 @@
             emit('clear')
         }else if(props.label === 'D'){
             emit('delete')
+        }else if(props.label === '( )'){
+            emit('toggleParenthesis')
         }else {
             emit('update:modelValue', props.modelValue + props.label);
         }

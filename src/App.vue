@@ -7,7 +7,7 @@
       </div>
       <div class="calc-button-row">
         <Btn class="c" label="AC" @clear="clear"/>
-        <Btn class="l" label="( )"/>
+        <Btn class="l" label="( )" @toggle-parenthesis="toggleParenthesis"/>
         <Btn class="l" label="%" v-model="typedLabel"/>
         <Btn class="l" label="/" v-model="typedLabel"/>
       </div>
@@ -51,6 +51,7 @@ export default defineComponent({
     const operationLabel = ref('');
     const typedLabel = ref('');
     let operation = '';
+    let openParentheses = 0;
 
     const calculate = () => {
       try {
@@ -70,12 +71,28 @@ export default defineComponent({
     const del = () =>{
       typedLabel.value = typedLabel.value.slice(0, -1);
     };
+
+    const appendToTypedLabel = (value: string) => {
+      typedLabel.value += value;
+    };
+
+    const toggleParenthesis = () => {
+      if (openParentheses > 0) {
+        appendToTypedLabel(')');
+        openParentheses -= 1;
+      } else {
+        appendToTypedLabel('(');
+        openParentheses += 1;
+      }
+    };
+    
     return {
       operationLabel,
       typedLabel,
       calculate,
       clear,
       del,
+      toggleParenthesis,
     };
   },
 });
