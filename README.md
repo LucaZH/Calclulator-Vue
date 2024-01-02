@@ -1,4 +1,4 @@
-# learning-vue
+# Calculator Vue
 
 ## Project setup
 ```
