@@ -2,12 +2,12 @@
   <div class="container">
     <div class="calc-body">
       <div class="calc-screen">
-        <div class="calc-operation">2536 + 419 + </div>
+        <div class="calc-operation">{{ operationLabel }}</div>
         <div class="calc-typed">{{ typedLabel }}</div>
       </div>
       <div class="calc-button-row">
-        <Btn class="c" label="1" v-model="typedLabel"/>
-        <Btn class="l" label="≠" v-model="typedLabel"/>
+        <Btn class="c" label="AC" @clear="clear"/>
+        <Btn class="l" label="( )"/>
         <Btn class="l" label="%" v-model="typedLabel"/>
         <Btn class="l" label="/" v-model="typedLabel"/>
       </div>
@@ -15,13 +15,13 @@
         <Btn label="7" v-model="typedLabel"/>
         <Btn label="8" v-model="typedLabel"/>
         <Btn label="9" v-model="typedLabel"/>
-        <Btn class="l" label="x" v-model="typedLabel"/>
+        <Btn class="l" label="*" v-model="typedLabel"/>
       </div>
       <div class="calc-button-row">
         <Btn label="4" v-model="typedLabel"/>
         <Btn label="5" v-model="typedLabel"/>
         <Btn label="6" v-model="typedLabel"/>
-        <Btn class="l" label="−" v-model="typedLabel"/>
+        <Btn class="l" label="-" v-model="typedLabel"/>
       </div>
       <div class="calc-button-row">
         <Btn label="1" v-model="typedLabel"/>
@@ -32,7 +32,8 @@
       <div class="calc-button-row">
         <Btn label="." v-model="typedLabel"/>
         <Btn label="0" v-model="typedLabel"/>
-        <Btn class="l" label="="/>
+        <Btn label="D" @delete="del"/>
+        <Btn class="l" label="=" @calculate="calculate"/>
       </div>
     </div>
   </div>
@@ -46,11 +47,36 @@ export default defineComponent({
   components: {
     Btn,
   },
-  setup(){
+  setup() {
+    const operationLabel = ref('');
     const typedLabel = ref('');
-    
-    return { typedLabel, }
-  }
+    let operation = '';
+
+    const calculate = () => {
+      try {
+        operation = typedLabel.value
+        const result = eval(typedLabel.value);
+        typedLabel.value = result.toString();
+        operationLabel.value = `${operation}=${result}`;
+      } catch (error) {
+        console.error('Error evaluating expression:', error);
+      }
+    };
+
+    const clear = () => {
+      typedLabel.value = ''
+    };
+
+    const del = () =>{
+      typedLabel.value = typedLabel.value.slice(0, -1);
+    };
+    return {
+      operationLabel,
+      typedLabel,
+      calculate,
+      clear,
+      del,
+    };
+  },
 });
 </script>
-

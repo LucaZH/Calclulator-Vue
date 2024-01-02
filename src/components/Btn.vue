@@ -17,11 +17,19 @@
         default: '',
       },
     },
-    emits: ['update:modelValue'],
+    emits: ['update:modelValue', 'calculate', 'clear', 'delete'],
     setup(props, { emit }) {
       const handleClick = () => {
-        console.log(`Button "${props.label}" clicked!`);
-        emit('update:modelValue', props.modelValue + props.label);
+        if (props.label === '=') {
+            emit('calculate');
+        } 
+        else if(props.label === 'AC'){
+            emit('clear')
+        }else if(props.label === 'D'){
+            emit('delete')
+        }else {
+            emit('update:modelValue', props.modelValue + props.label);
+        }
       };
   
       return {
